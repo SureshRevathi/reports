@@ -1,0 +1,33 @@
+openapi: 3.0.0
+info:
+  title: GetReportParameters
+  description: Get Report parameters using GET method.
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080/api
+paths:
+  /getReportParameters:
+    get:
+      summary: Get all report parameters
+      description: Retrieve a list of report parameters.
+      responses:
+        '200':
+          description: A list of report parameters.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:  # "items" is used to define the items in the array
+                  type: object
+                  properties:
+                    customer_reference:
+                      type: string
+                      example: "CUST123456"
+                    from_date:
+                      type: string
+                      format: date
+                      example: "2024-07-01"
+                    to_date:
+                      type: string
+                      format: date
+                      example: "2024-07-31"
