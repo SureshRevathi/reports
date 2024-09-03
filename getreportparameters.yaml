@@ -1,33 +1,106 @@
-openapi: 3.0.0
+openapi: 3.0.1
 info:
-  title: GetReportParameters
-  description: Get Report parameters using GET method.
+  title: Sample API
+  description: A simple API with one GET method, one parameter, and one response.
   version: 1.0.0
 servers:
-  - url: http://localhost:8080/api
+  - url: 'https://api.example.com'
 paths:
   /getReportParameters:
     get:
-      summary: Get all report parameters
-      description: Retrieve a list of report parameters.
+      tags:
+        - Report Parameters
+      summary: Get a report parameters
+      description: Retrieve a report parameters based on a query parameter.
+      operationId: getReportParameters
+      parameters:
+         - $ref: '#/components/parameters/report_name'
       responses:
         '200':
-          description: A list of report parameters.
-          content:
-            application/json:
-              schema:
-                type: array
-                items:  # "items" is used to define the items in the array
-                  type: object
-                  properties:
-                    customer_reference:
-                      type: string
-                      example: "CUST123456"
-                    from_date:
-                      type: string
-                      format: date
-                      example: "2024-07-01"
-                    to_date:
-                      type: string
-                      format: date
-                      example: "2024-07-31"
+          $ref: '#/components/responses/getparametersresponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+components:
+  schemas:
+    ReportParameters:
+      type: object
+      properties:
+        filter_name:
+          type: string
+          description: Get filer name.
+          format: string
+        filter_type:
+          type: string
+          description: Get filter type.
+          format: string
+    HTTPError:
+      type: object
+      properties:
+        status_code:
+          type: integer
+          description: HTTP status code.
+          format: string
+        message:
+          type: string
+          description: Error message details.
+          format: string
+  parameters:
+    report_name:
+      name: report_name
+      in: query
+      required: true
+      schema:
+        type: string
+  responses:  
+    getparametersresponse:
+      description: Successfully retrieved the Report Parameters.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ReportParameters'
+    BadRequest:
+      description: Badrequest
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/HTTPError'
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/HTTPError'
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/HTTPError'
+    NotFound:
+      description: NotFound
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/HTTPError' 
+    TooManyRequests:
+      description: TooManyRequests
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/HTTPError'
+    InternalServerError:
+      description: InternalServerError
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/HTTPError'        
